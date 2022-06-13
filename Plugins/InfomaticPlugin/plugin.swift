@@ -8,15 +8,19 @@ import PackagePlugin
 
 @main struct InfomaticPlugin: BuildToolPlugin {
     func createBuildCommands(context: PackagePlugin.PluginContext, target: PackagePlugin.Target) async throws -> [PackagePlugin.Command] {
+        print("foo")
         guard let target = target as? SourceModuleTarget else {
             return []
         }
         
+        let outputRoot = context.pluginWorkDirectory.appending("GeneratedSources")
+
         var inputMap: [Path:[Path]] = [:]
         let sources = target.sourceFiles(withSuffix: "info")
         for source in sources {
+            print("found source \(source)")
             if let outputName = source.path.stem.split(separator: "-").first {
-                let outputPath = source.path.removingLastComponent().appending(subpath: "\(outputName).plist")
+                let outputPath = outputRoot.appending(subpath: "\(outputName).plist")
                 inputMap.append(source.path, forKey: outputPath)
             }
         }

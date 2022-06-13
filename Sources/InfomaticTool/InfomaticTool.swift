@@ -7,8 +7,10 @@ import Foundation
 
 @main struct InfomaticTool {
     static func main() {
-        guard CommandLine.arguments.count < 3 else {
-            fatalError("not enough arguments: \(CommandLine.arguments)")
+        print(CommandLine.arguments)
+        
+        guard CommandLine.arguments.count > 1 else {
+            fatalError("not enough arguments")
         }
 
         var info: [String:Any] = [:]

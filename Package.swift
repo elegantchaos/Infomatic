@@ -8,7 +8,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Infomatic",
+    name: "InfomaticPlugin",
     platforms: [
         .macOS(.v10_13)
     ],
@@ -22,7 +22,7 @@ let package = Package(
         ),
         
         .executable(
-            name: "Infomatic",
+            name: "InfomaticTool",
             targets: [
                 "InfomaticTool"
             ]
