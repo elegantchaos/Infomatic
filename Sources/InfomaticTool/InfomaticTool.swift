@@ -15,7 +15,9 @@ import Foundation
 
         var info: [String:Any] = [:]
         for input in CommandLine.arguments[2...] {
-            info[input] = "blah"
+            if let properties = read(source: input) {
+                info.merge(properties, uniquingKeysWith: { old, new in new })
+            }
         }
 
         let outputPath = CommandLine.arguments[1]
@@ -23,5 +25,24 @@ import Foundation
         let infoURL = URL(fileURLWithPath: outputPath)
         try? infoData?.write(to: infoURL)
 
+    }
+    
+    static func read(source: String) -> [String:Any]? {
+        let url = URL(fileURLWithPath: source)
+        
+        guard let data = try? Data(contentsOf: url) else {
+            return nil
+        }
+        
+        var format = PropertyListSerialization.PropertyListFormat.xml
+        if let properties = try? PropertyListSerialization.propertyList(from: data, format: &format) {
+            return properties as? [String: Any]
+        }
+        
+        if let properties = try? JSONSerialization.jsonObject(with: data) {
+            return properties as? [String:Any]
+        }
+        
+        return nil
     }
 }
